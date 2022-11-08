@@ -26,14 +26,13 @@ public class PlayableGameImpl implements PlayableGame {
                     String.format("Game %s not found", gameId)
             );
         }
-
         validateGameStatus(gameId, game);
-        validateAndSaveMoves(gamePlay, game);
-        validateAndSavePositions(gamePlay, game);
+        validateMovesAndPositions(gamePlay, game);
+        saveMovesAndPosition(gamePlay, game);
         return game;
     }
 
-    private static void validateAndSaveMoves(GamePlay gamePlay, Game game) throws GameMovesException {
+    private static void validateMovesAndPositions(GamePlay gamePlay, Game game) throws GameMovesException {
         if(game.getMoves().isEmpty() && !TicTacToe.X.equals(gamePlay.getType())) {
             throw new GameMovesException("First moves should be X");
         }
@@ -48,10 +47,6 @@ public class PlayableGameImpl implements PlayableGame {
             }
         }
 
-        game.getMoves().add(gamePlay.getType().name());
-    }
-
-    private void validateAndSavePositions(GamePlay gamePlay, Game game) throws GameMovesException {
         if(game.getBoard()[gamePlay.getRowNumber() - 1][gamePlay.getColumnNumber() - 1] != 0) {
             throw new GameMovesException(
                     String.format(
@@ -59,7 +54,10 @@ public class PlayableGameImpl implements PlayableGame {
                     )
             );
         }
+    }
 
+    private void saveMovesAndPosition(GamePlay gamePlay, Game game) {
+        game.getMoves().add(gamePlay.getType().name());
         game.getBoard()[gamePlay.getRowNumber() - 1][gamePlay.getColumnNumber() - 1] = gamePlay.getType().getValue();
     }
 

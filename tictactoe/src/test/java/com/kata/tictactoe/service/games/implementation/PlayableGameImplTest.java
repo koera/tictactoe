@@ -139,5 +139,18 @@ class PlayableGameImplTest {
         assertEquals("Wrong turn, O's turn now", exception.getMessage());
     }
 
+    @Test
+    void testPlayGame_only_validate_moves_and_position_will_be_saved() throws GameMovesException, GameNotFoundException, GameStatusException {
+        Game xTurn = playOnPostion(TicTacToe.X, 1, 1);
+        GamePlay oPlayedInWrongPosition = createGamePlayFor(gameId, TicTacToe.O, 1, 1);
+
+        GameMovesException exception = assertThrows(GameMovesException.class, () -> {
+            playbaleGame.playGame(oPlayedInWrongPosition);
+        });
+
+
+        assertEquals("X", xTurn.getMoves().get(0));
+    }
+
 
 }
