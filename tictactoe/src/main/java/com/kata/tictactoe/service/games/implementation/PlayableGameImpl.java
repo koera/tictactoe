@@ -32,6 +32,7 @@ public class PlayableGameImpl implements PlayableGame {
         if(game.getMoves().isEmpty() && !TicTacToe.X.equals(gamePlay.getType())) {
             throw new GameMovesException("First moves should be X");
         }
+        game.getMoves().add(gamePlay.getType().name());
 
         validateAndSavePositions(gamePlay, game);
 
