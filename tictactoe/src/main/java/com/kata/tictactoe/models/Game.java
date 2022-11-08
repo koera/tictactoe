@@ -1,5 +1,7 @@
 package com.kata.tictactoe.models;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Game {
@@ -8,7 +10,7 @@ public class Game {
     private Player player1;
     private Player player2;
     private int[][] board;
-    private String[] moves;
+    private List<String> moves = new ArrayList<>();
     private GameStatus status;
     private TicTacToe winner;
 
@@ -44,12 +46,8 @@ public class Game {
         this.board = board;
     }
 
-    public String[] getMoves() {
+    public List<String> getMoves() {
         return moves;
-    }
-
-    public void setMoves(String[] moves) {
-        this.moves = moves;
     }
 
     public GameStatus getStatus() {
