@@ -4,6 +4,7 @@ import com.kata.tictactoe.models.Game;
 import com.kata.tictactoe.models.GameStatus;
 import com.kata.tictactoe.models.Player;
 import com.kata.tictactoe.service.games.context.GameContextHolder;
+import com.kata.tictactoe.service.games.exception.GameAlreadyInProgressException;
 import com.kata.tictactoe.service.games.exception.GameNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,20 +39,20 @@ class JoinableGameImplTest {
 
 
     @Test
-    void testJoinToGame_existing_started_game_should_be_returned() throws GameNotFoundException {
+    void testJoinToGame_existing_started_game_should_be_returned() throws GameNotFoundException, GameAlreadyInProgressException {
         Game game = joinableGame.joinToGame(existingGameID, player2);
         assertEquals(CONTEXT.getGames().get(existingGameID), game);
     }
 
     @Test
-    void testJoinToGame_player2_should_be_set() throws GameNotFoundException {
+    void testJoinToGame_player2_should_be_set() throws GameNotFoundException, GameAlreadyInProgressException {
         Game game = joinableGame.joinToGame(existingGameID, player2);
         assertNotNull(game.getPlayer2());
         assertEquals(player2, game.getPlayer2());
     }
 
     @Test
-    void testJoinToGame_status_should_be_in_progress() throws GameNotFoundException {
+    void testJoinToGame_status_should_be_in_progress() throws GameNotFoundException, GameAlreadyInProgressException {
         Game game = joinableGame.joinToGame(existingGameID, player2);
         assertEquals(GameStatus.IN_PROGRESS, game.getStatus());
     }
@@ -65,6 +66,17 @@ class JoinableGameImplTest {
         });
 
         assertEquals("Game with id " + randomGameId + " cannot be found", exception.getMessage());
+    }
+
+    @Test
+    void testJoinToGame_only_game_with_status_new_can_be_joined() throws GameNotFoundException, GameAlreadyInProgressException {
+        Game game = joinableGame.joinToGame(existingGameID, player2);
+        game.setStatus(GameStatus.IN_PROGRESS);
+        GameAlreadyInProgressException exception = assertThrows(GameAlreadyInProgressException.class, () -> {
+            joinableGame.joinToGame(existingGameID, player2);
+        });
+
+        assertEquals("Game with id " + existingGameID + " is already started or finished", exception.getMessage());
     }
 
 
