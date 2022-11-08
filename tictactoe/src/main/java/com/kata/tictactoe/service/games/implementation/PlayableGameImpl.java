@@ -10,8 +10,6 @@ import com.kata.tictactoe.service.games.exception.GameMovesException;
 import com.kata.tictactoe.service.games.exception.GameNotFoundException;
 import com.kata.tictactoe.service.games.exception.GameStatusException;
 
-import java.util.UUID;
-
 public class PlayableGameImpl implements PlayableGame {
 
     private static final int[][] HORIZONTAL_COMBINATION_POSITIONS = {{0,1,2}, {3,4,5}, {6,7,8}};
@@ -44,11 +42,11 @@ public class PlayableGameImpl implements PlayableGame {
     }
 
     private boolean shouldFinishTheGame(GamePlay gamePlay, Game game) {
-        boolean playerHas3Horizontal = isTypeHas3InARow(game.getBoard(), gamePlay.getType());
+        boolean playerHas3Horizontal = typeHas3InARow(game.getBoard(), gamePlay.getType());
         return playerHas3Horizontal || isAllSquaresFilled(game.getBoard());
     }
 
-    private boolean isTypeHas3InARow(int[][] board, TicTacToe type) {
+    private boolean typeHas3InARow(int[][] board, TicTacToe type) {
 
         int[] gameBoardInArray = getGameBoardAsArray(board);
 
