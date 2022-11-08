@@ -7,21 +7,26 @@ import com.kata.tictactoe.service.games.exception.GameNotFoundException;
 import com.kata.tictactoe.service.games.exception.GameStatusException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PlaybaleGameImplTest {
+class PlayableGameImplTest {
 
-    PlaybaleGameImpl playbaleGame = new PlaybaleGameImpl();
+    PlayableGameImpl playbaleGame = new PlayableGameImpl();
     UUID gameId = UUID.randomUUID();
 
     GameContextHolder CONTEXT;
 
     @BeforeEach
-    void createGameData(){
+    void createGameData(TestInfo testInfo){
         CONTEXT = GameContextHolder.getInstance();
+        if(testInfo.getDisplayName().equals("testPlayGame_only_game_in_context_can_be_played()")){
+            return;
+        }
+        simulateStartAndJoinGame(gameId);
     }
 
     private GamePlay createGamePlayFor(UUID gameId, TicTacToe type, int row, int col) {
@@ -59,8 +64,6 @@ class PlaybaleGameImplTest {
     @Test
     void testPlayGame_only_game_with_status_in_progress_can_be_played() throws GameNotFoundException, GameStatusException, GameMovesException {
 
-        simulateStartAndJoinGame(gameId);
-
         GamePlay gamePlay = createGamePlayFor(gameId, TicTacToe.X, 1 , 1);
 
         Game game = playbaleGame.playGame(gamePlay);
@@ -75,15 +78,30 @@ class PlaybaleGameImplTest {
 
     @Test
     void testPlayGame_first_moves_should_be_X(){
-        simulateStartAndJoinGame(gameId);
 
-        GamePlay gamePlay1 = createGamePlayFor(gameId, TicTacToe.O, 1, 1);
+        GamePlay gamePlay = createGamePlayFor(gameId, TicTacToe.O, 1, 1);
 
         GameMovesException exception = assertThrows(GameMovesException.class, () -> {
-            playbaleGame.playGame(gamePlay1);
+            playbaleGame.playGame(gamePlay);
         });
 
         assertEquals("First moves should be X", exception.getMessage());
+    }
+
+    @Test
+    void testPlayGame_played_position_should_be_saved() throws GameMovesException, GameNotFoundException, GameStatusException {
+        simulateStartAndJoinGame(gameId);
+
+        GamePlay gamePlay1 = createGamePlayFor(gameId, TicTacToe.X, 1, 2);
+        Game game1 = playbaleGame.playGame(gamePlay1);
+
+        assertEquals(1, game1.getBoard()[0][1]);
+
+        GamePlay gamePlay2 = createGamePlayFor(gameId, TicTacToe.X, 2, 2);
+        Game game2 = playbaleGame.playGame(gamePlay2);
+
+        assertEquals(1, game1.getBoard()[1][1]);
+
     }
 
 

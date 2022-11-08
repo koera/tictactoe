@@ -9,7 +9,7 @@ public class Game {
     private UUID gameId;
     private Player player1;
     private Player player2;
-    private int[][] board;
+    private int[][] board = new int[3][3];
     private List<String> moves = new ArrayList<>();
     private GameStatus status;
     private TicTacToe winner;

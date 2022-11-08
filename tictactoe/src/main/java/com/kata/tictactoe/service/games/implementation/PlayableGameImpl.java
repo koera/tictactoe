@@ -12,7 +12,7 @@ import com.kata.tictactoe.service.games.exception.GameStatusException;
 
 import java.util.UUID;
 
-public class PlaybaleGameImpl implements PlayableGame {
+public class PlayableGameImpl implements PlayableGame {
 
     GameContextHolder CONTEXT = GameContextHolder.getInstance();
 
@@ -36,6 +36,8 @@ public class PlaybaleGameImpl implements PlayableGame {
         if(game.getMoves().isEmpty() && !TicTacToe.X.equals(gamePlay.getType())) {
             throw new GameMovesException("First moves should be X");
         }
+
+        game.getBoard()[gamePlay.getColumnNumber() - 1][gamePlay.getRowNumber() - 1] = gamePlay.getType().getValue();
 
         return game;
     }
