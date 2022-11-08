@@ -29,6 +29,17 @@ public class PlayableGameImpl implements PlayableGame {
         validateGameStatus(gameId, game);
         validateMovesAndPositions(gamePlay, game);
         saveMovesAndPosition(gamePlay, game);
+        boolean allSquaresFilled = true;
+        for(int i=0;i<game.getBoard().length;i++) {
+            for(int j=0;j<game.getBoard()[i].length; j++) {
+                if(game.getBoard()[i][j] == 0) {
+                    allSquaresFilled = false;
+                }
+            }
+        }
+        if(allSquaresFilled) {
+            game.setStatus(GameStatus.FINISHED);
+        }
         return game;
     }
 
