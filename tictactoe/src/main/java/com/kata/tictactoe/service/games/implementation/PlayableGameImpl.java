@@ -14,9 +14,9 @@ import java.util.UUID;
 
 public class PlayableGameImpl implements PlayableGame {
 
-    private static int[][] HORIZONTAL_COMBINATION_POSITIONS = {{0,1,2}, {3,4,5}, {6,7,8}};
+    private static final int[][] HORIZONTAL_COMBINATION_POSITIONS = {{0,1,2}, {3,4,5}, {6,7,8}};
 
-    private static GameContextHolder CONTEXT = GameContextHolder.getInstance();
+    private static final GameContextHolder CONTEXT = GameContextHolder.getInstance();
 
     @Override
     public Game playGame(GamePlay gamePlay) throws GameNotFoundException, GameStatusException, GameMovesException {
@@ -32,15 +32,15 @@ public class PlayableGameImpl implements PlayableGame {
         validateMovesAndPositions(gamePlay, game);
         saveMovesAndPosition(gamePlay, game);
 
-        if(shouldFinishTheGame(gamePlay.getType(), game)) {
+        if(shouldFinishTheGame(gamePlay, game)) {
             game.setStatus(GameStatus.FINISHED);
         }
 
         return game;
     }
 
-    private boolean shouldFinishTheGame(TicTacToe type, Game game) {
-        boolean playerHas3Horizontal = isTypeHas3InARow(game.getBoard(), type);
+    private boolean shouldFinishTheGame(GamePlay gamePlay, Game game) {
+        boolean playerHas3Horizontal = isTypeHas3InARow(game.getBoard(), gamePlay.getType());
         return playerHas3Horizontal || isAllSquaresFilled(game.getBoard());
     }
 
@@ -48,12 +48,12 @@ public class PlayableGameImpl implements PlayableGame {
 
         int[] gameBoardInArray = getGameBoardAsArray(board);
 
-        for(int i = 0; i< HORIZONTAL_COMBINATION_POSITIONS.length; i++) {
+        for (int[] horizontalCombinationPosition : HORIZONTAL_COMBINATION_POSITIONS) {
             int counter = 0;
-            for(int j = 0; j< HORIZONTAL_COMBINATION_POSITIONS[i].length; j++) {
-                if(gameBoardInArray[HORIZONTAL_COMBINATION_POSITIONS[i][j]] == type.getValue()){
+            for (int i : horizontalCombinationPosition) {
+                if (gameBoardInArray[i] == type.getValue()) {
                     counter++;
-                    if(counter == 3){
+                    if (counter == 3) {
                         return true;
                     }
                 }
@@ -67,9 +67,9 @@ public class PlayableGameImpl implements PlayableGame {
         int[] gameBoardInArray = new int[9];
         int counterIndex = 0;
 
-        for(int i = 0; i< boards.length; i++) {
-            for(int j = 0; j< boards[i].length; j++) {
-                gameBoardInArray[counterIndex] = boards[i][j];
+        for (int[] board : boards) {
+            for (int i : board) {
+                gameBoardInArray[counterIndex] = i;
                 counterIndex++;
             }
         }
@@ -77,9 +77,9 @@ public class PlayableGameImpl implements PlayableGame {
     }
 
     private boolean isAllSquaresFilled(int[][] boards) {
-        for(int i = 0; i< boards.length; i++) {
-            for(int j = 0; j< boards[i].length; j++) {
-                if(boards[i][j] == 0) {
+        for (int[] board : boards) {
+            for (int i : board) {
+                if (i == 0) {
                     return false;
                 }
             }
@@ -88,26 +88,38 @@ public class PlayableGameImpl implements PlayableGame {
     }
 
     private void validateMovesAndPositions(GamePlay gamePlay, Game game) throws GameMovesException {
-        if(game.getMoves().isEmpty() && !TicTacToe.X.equals(gamePlay.getType())) {
-            throw new GameMovesException("First moves should be X");
-        }
+        validateFirstMove(gamePlay, game);
 
         if(!game.getMoves().isEmpty()) {
-            String lastMove = game.getMoves().get(game.getMoves().size() - 1);
-
-            if (lastMove.equalsIgnoreCase(gamePlay.getType().name())) {
-                throw new GameMovesException(
-                        String.format("Wrong turn, %s's turn now", gamePlay.getType().equals(TicTacToe.X) ? TicTacToe.O : TicTacToe.X)
-                );
-            }
+            validateAlternateTurn(gamePlay, game);
         }
 
+        validatePosition(gamePlay, game);
+    }
+
+    private void validatePosition(GamePlay gamePlay, Game game) throws GameMovesException {
         if(game.getBoard()[gamePlay.getRowNumber() - 1][gamePlay.getColumnNumber() - 1] != 0) {
             throw new GameMovesException(
                     String.format(
                             "Position at row %d and col %d is already played", gamePlay.getRowNumber(), gamePlay.getColumnNumber()
                     )
             );
+        }
+    }
+
+    private void validateAlternateTurn(GamePlay gamePlay, Game game) throws GameMovesException {
+        String lastMove = game.getMoves().get(game.getMoves().size() - 1);
+
+        if (lastMove.equalsIgnoreCase(gamePlay.getType().name())) {
+            throw new GameMovesException(
+                    String.format("Wrong turn, %s's turn now", gamePlay.getType().equals(TicTacToe.X) ? TicTacToe.O : TicTacToe.X)
+            );
+        }
+    }
+
+    private void validateFirstMove(GamePlay gamePlay, Game game) throws GameMovesException {
+        if(game.getMoves().isEmpty() && !TicTacToe.X.equals(gamePlay.getType())) {
+            throw new GameMovesException("First moves should be X");
         }
     }
 
