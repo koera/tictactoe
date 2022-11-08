@@ -20,16 +20,10 @@ public class PlayableGameImpl implements PlayableGame {
 
     @Override
     public Game playGame(GamePlay gamePlay) throws GameNotFoundException, GameStatusException, GameMovesException {
-        UUID gameId = gamePlay.getGameId();
-        Game game = CONTEXT.getGames().get(gameId);
 
-        if(game == null) {
-            throw  new GameNotFoundException(
-                    String.format("Game %s not found", gameId)
-            );
-        }
-        validateGameStatus(gameId, game);
-        validateMovesAndPositions(gamePlay, game);
+        Game game = CONTEXT.getGames().get(gamePlay.getGameId());
+
+        validateGameData(gamePlay, game);
         saveMovesAndPosition(gamePlay, game);
 
         if(shouldFinishTheGame(gamePlay, game)) {
@@ -37,6 +31,16 @@ public class PlayableGameImpl implements PlayableGame {
         }
 
         return game;
+    }
+
+    private void validateGameData(GamePlay gamePlay, Game game) throws GameStatusException, GameMovesException, GameNotFoundException {
+        if(game == null) {
+            throw  new GameNotFoundException(
+                    String.format("Game %s not found", gamePlay.getGameId())
+            );
+        }
+        validateGameStatus(game);
+        validateMovesAndPositions(gamePlay, game);
     }
 
     private boolean shouldFinishTheGame(GamePlay gamePlay, Game game) {
@@ -128,10 +132,10 @@ public class PlayableGameImpl implements PlayableGame {
         game.getBoard()[gamePlay.getRowNumber() - 1][gamePlay.getColumnNumber() - 1] = gamePlay.getType().getValue();
     }
 
-    private void validateGameStatus(UUID gameId, Game game) throws GameStatusException {
+    private void validateGameStatus(Game game) throws GameStatusException {
         if(!GameStatus.IN_PROGRESS.equals(game.getStatus())) {
             throw new GameStatusException(
-                    String.format("Game %s is not started yet or already finished", gameId)
+                    String.format("Game %s is not started yet or already finished", game.getGameId())
             );
         }
     }
