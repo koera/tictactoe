@@ -29,21 +29,26 @@ public class PlayableGameImpl implements PlayableGame {
         validateGameStatus(gameId, game);
         validateMovesAndPositions(gamePlay, game);
         saveMovesAndPosition(gamePlay, game);
-        boolean allSquaresFilled = true;
-        for(int i=0;i<game.getBoard().length;i++) {
-            for(int j=0;j<game.getBoard()[i].length; j++) {
-                if(game.getBoard()[i][j] == 0) {
-                    allSquaresFilled = false;
-                }
-            }
-        }
-        if(allSquaresFilled) {
+
+        if(isAllSquaresFilled(game.getBoard())) {
             game.setStatus(GameStatus.FINISHED);
         }
+
         return game;
     }
 
-    private static void validateMovesAndPositions(GamePlay gamePlay, Game game) throws GameMovesException {
+    private boolean isAllSquaresFilled(int[][] boards) {
+        for(int i = 0; i< boards.length; i++) {
+            for(int j = 0; j< boards[i].length; j++) {
+                if(boards[i][j] == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void validateMovesAndPositions(GamePlay gamePlay, Game game) throws GameMovesException {
         if(game.getMoves().isEmpty() && !TicTacToe.X.equals(gamePlay.getType())) {
             throw new GameMovesException("First moves should be X");
         }
@@ -72,7 +77,7 @@ public class PlayableGameImpl implements PlayableGame {
         game.getBoard()[gamePlay.getRowNumber() - 1][gamePlay.getColumnNumber() - 1] = gamePlay.getType().getValue();
     }
 
-    private static void validateGameStatus(UUID gameId, Game game) throws GameStatusException {
+    private void validateGameStatus(UUID gameId, Game game) throws GameStatusException {
         if(!GameStatus.IN_PROGRESS.equals(game.getStatus())) {
             throw new GameStatusException(
                     String.format("Game %s is not started yet or already finished", gameId)
