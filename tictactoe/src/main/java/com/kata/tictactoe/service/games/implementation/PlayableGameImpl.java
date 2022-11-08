@@ -37,7 +37,15 @@ public class PlayableGameImpl implements PlayableGame {
             throw new GameMovesException("First moves should be X");
         }
 
-        game.getBoard()[gamePlay.getColumnNumber() - 1][gamePlay.getRowNumber() - 1] = gamePlay.getType().getValue();
+        if(game.getBoard()[gamePlay.getRowNumber() - 1][gamePlay.getColumnNumber() - 1] != 0) {
+            throw new GameMovesException(
+                    String.format(
+                            "Position at row %d and col %d is already played", gamePlay.getRowNumber(), gamePlay.getColumnNumber()
+                    )
+            );
+        }
+
+        game.getBoard()[gamePlay.getRowNumber() - 1][gamePlay.getColumnNumber() - 1] = gamePlay.getType().getValue();
 
         return game;
     }

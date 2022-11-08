@@ -33,8 +33,8 @@ class PlayableGameImplTest {
         GamePlay gamePlay = new GamePlay();
         gamePlay.setGameId(gameId);
         gamePlay.setType(type);
-        gamePlay.setColumnNumber(row);
-        gamePlay.setRowNumber(col);
+        gamePlay.setColumnNumber(col);
+        gamePlay.setRowNumber(row);
         return gamePlay;
     }
 
@@ -92,16 +92,31 @@ class PlayableGameImplTest {
     void testPlayGame_played_position_should_be_saved() throws GameMovesException, GameNotFoundException, GameStatusException {
         simulateStartAndJoinGame(gameId);
 
-        GamePlay gamePlay1 = createGamePlayFor(gameId, TicTacToe.X, 1, 2);
-        Game game1 = playbaleGame.playGame(gamePlay1);
-
+        Game game1 = playOnPostion(TicTacToe.X, 1, 2);
         assertEquals(1, game1.getBoard()[0][1]);
 
-        GamePlay gamePlay2 = createGamePlayFor(gameId, TicTacToe.X, 2, 2);
-        Game game2 = playbaleGame.playGame(gamePlay2);
+        Game game2 = playOnPostion(TicTacToe.X, 2, 3);
+        assertEquals(1, game2.getBoard()[1][2]);
 
-        assertEquals(1, game1.getBoard()[1][1]);
+    }
 
+    private Game playOnPostion(TicTacToe type, int row, int col) throws GameNotFoundException, GameStatusException, GameMovesException {
+        GamePlay gamePlay1 = createGamePlayFor(gameId, type, row, col);
+        return playbaleGame.playGame(gamePlay1);
+    }
+
+    @Test
+    void testPlayGame_player_cannot_play_on_played_position() throws GameMovesException, GameNotFoundException, GameStatusException {
+        simulateStartAndJoinGame(gameId);
+        playOnPostion(TicTacToe.X, 2, 1);
+
+        GamePlay gamePlay = createGamePlayFor(gameId, TicTacToe.X, 2 , 1);
+
+        GameMovesException exception = assertThrows(GameMovesException.class, () -> {
+            playbaleGame.playGame(gamePlay);
+        });
+
+        assertEquals("Position at row 2 and col 1 is already played", exception.getMessage());
     }
 
 
