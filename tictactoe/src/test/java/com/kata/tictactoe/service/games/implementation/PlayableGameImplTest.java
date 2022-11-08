@@ -99,15 +99,15 @@ class PlayableGameImplTest {
         Game game1 = playOnPostion(TicTacToe.X, 1, 2);
         assertEquals(1, game1.getBoard()[0][1]);
 
-        Game game2 = playOnPostion(TicTacToe.X, 2, 3);
-        assertEquals(1, game2.getBoard()[1][2]);
+        Game game2 = playOnPostion(TicTacToe.O, 2, 3);
+        assertEquals(2, game2.getBoard()[1][2]);
     }
 
     @Test
     void testPlayGame_player_cannot_play_on_played_position() throws GameMovesException, GameNotFoundException, GameStatusException {
         playOnPostion(TicTacToe.X, 2, 1);
 
-        GamePlay gamePlay = createGamePlayFor(gameId, TicTacToe.X, 2 , 1);
+        GamePlay gamePlay = createGamePlayFor(gameId, TicTacToe.O, 2 , 1);
 
         GameMovesException exception = assertThrows(GameMovesException.class, () -> {
             playbaleGame.playGame(gamePlay);
@@ -123,6 +123,20 @@ class PlayableGameImplTest {
 
         Game game2 = playOnPostion(TicTacToe.O, 1, 2);
         assertEquals("O", game2.getMoves().get(1));
+    }
+
+    @Test
+    void testPlayGame_players_alternate_placing_X_and_O() throws GameMovesException, GameNotFoundException, GameStatusException {
+
+        Game xTurn = playOnPostion(TicTacToe.X, 1, 1);
+
+        GamePlay xTurnAgain = createGamePlayFor(gameId, TicTacToe.X, 1 , 2);
+
+        GameMovesException exception = assertThrows(GameMovesException.class, () -> {
+            playbaleGame.playGame(xTurnAgain);
+        });
+
+        assertEquals("Wrong turn, O's turn now", exception.getMessage());
     }
 
 
