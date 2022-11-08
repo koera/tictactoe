@@ -30,11 +30,43 @@ public class PlayableGameImpl implements PlayableGame {
         validateMovesAndPositions(gamePlay, game);
         saveMovesAndPosition(gamePlay, game);
 
-        if(isAllSquaresFilled(game.getBoard())) {
+        int[][] boards = game.getBoard();
+
+        int[] gameBoardInArray = new int[9];
+        int counterIndex = 0;
+
+        for(int i = 0; i< boards.length; i++) {
+            for(int j = 0; j< boards[i].length; j++) {
+               gameBoardInArray[counterIndex] = boards[i][j];
+                counterIndex++;
+            }
+        }
+
+        boolean playerHas3Horizontal = isPlayerHas3InARow(gamePlay.getType(), gameBoardInArray);
+
+        if(playerHas3Horizontal || isAllSquaresFilled(boards)) {
             game.setStatus(GameStatus.FINISHED);
         }
 
         return game;
+    }
+
+    private static boolean isPlayerHas3InARow(TicTacToe type, int[] gameBoardInArray) {
+
+        int[][] horizontalCombinations = {{0,1,2}, {3,4,5}, {6,7,8}};
+
+        for(int i = 0; i< horizontalCombinations.length; i++) {
+            int counter = 0;
+            for(int j = 0; j< horizontalCombinations[i].length; j++) {
+                if(gameBoardInArray[horizontalCombinations[i][j]] == type.getValue()){
+                    counter++;
+                    if(counter == 3){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private boolean isAllSquaresFilled(int[][] boards) {
