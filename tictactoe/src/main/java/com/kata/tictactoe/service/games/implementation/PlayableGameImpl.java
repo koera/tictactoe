@@ -27,16 +27,18 @@ public class PlayableGameImpl implements PlayableGame {
             );
         }
 
-        if(!GameStatus.IN_PROGRESS.equals(game.getStatus())) {
-            throw new GameStatusException(
-                    String.format("Game %s is not started yet or already finished", gameId)
-            );
-        }
+        validateGameStatus(gameId, game);
 
         if(game.getMoves().isEmpty() && !TicTacToe.X.equals(gamePlay.getType())) {
             throw new GameMovesException("First moves should be X");
         }
 
+        validateAndSavePositions(gamePlay, game);
+
+        return game;
+    }
+
+    private void validateAndSavePositions(GamePlay gamePlay, Game game) throws GameMovesException {
         if(game.getBoard()[gamePlay.getRowNumber() - 1][gamePlay.getColumnNumber() - 1] != 0) {
             throw new GameMovesException(
                     String.format(
@@ -46,7 +48,13 @@ public class PlayableGameImpl implements PlayableGame {
         }
 
         game.getBoard()[gamePlay.getRowNumber() - 1][gamePlay.getColumnNumber() - 1] = gamePlay.getType().getValue();
+    }
 
-        return game;
+    private static void validateGameStatus(UUID gameId, Game game) throws GameStatusException {
+        if(!GameStatus.IN_PROGRESS.equals(game.getStatus())) {
+            throw new GameStatusException(
+                    String.format("Game %s is not started yet or already finished", gameId)
+            );
+        }
     }
 }
