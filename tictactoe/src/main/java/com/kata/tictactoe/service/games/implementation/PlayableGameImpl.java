@@ -14,7 +14,9 @@ import java.util.UUID;
 
 public class PlayableGameImpl implements PlayableGame {
 
-    GameContextHolder CONTEXT = GameContextHolder.getInstance();
+    private static int[][] HORIZONTAL_COMBINATION_POSITIONS = {{0,1,2}, {3,4,5}, {6,7,8}};
+
+    private static GameContextHolder CONTEXT = GameContextHolder.getInstance();
 
     @Override
     public Game playGame(GamePlay gamePlay) throws GameNotFoundException, GameStatusException, GameMovesException {
@@ -30,35 +32,26 @@ public class PlayableGameImpl implements PlayableGame {
         validateMovesAndPositions(gamePlay, game);
         saveMovesAndPosition(gamePlay, game);
 
-        int[][] boards = game.getBoard();
-
-        int[] gameBoardInArray = new int[9];
-        int counterIndex = 0;
-
-        for(int i = 0; i< boards.length; i++) {
-            for(int j = 0; j< boards[i].length; j++) {
-               gameBoardInArray[counterIndex] = boards[i][j];
-                counterIndex++;
-            }
-        }
-
-        boolean playerHas3Horizontal = isPlayerHas3InARow(gamePlay.getType(), gameBoardInArray);
-
-        if(playerHas3Horizontal || isAllSquaresFilled(boards)) {
+        if(shouldFinishTheGame(gamePlay.getType(), game)) {
             game.setStatus(GameStatus.FINISHED);
         }
 
         return game;
     }
 
-    private static boolean isPlayerHas3InARow(TicTacToe type, int[] gameBoardInArray) {
+    private boolean shouldFinishTheGame(TicTacToe type, Game game) {
+        boolean playerHas3Horizontal = isTypeHas3InARow(game.getBoard(), type);
+        return playerHas3Horizontal || isAllSquaresFilled(game.getBoard());
+    }
 
-        int[][] horizontalCombinations = {{0,1,2}, {3,4,5}, {6,7,8}};
+    private boolean isTypeHas3InARow(int[][] board, TicTacToe type) {
 
-        for(int i = 0; i< horizontalCombinations.length; i++) {
+        int[] gameBoardInArray = getGameBoardAsArray(board);
+
+        for(int i = 0; i< HORIZONTAL_COMBINATION_POSITIONS.length; i++) {
             int counter = 0;
-            for(int j = 0; j< horizontalCombinations[i].length; j++) {
-                if(gameBoardInArray[horizontalCombinations[i][j]] == type.getValue()){
+            for(int j = 0; j< HORIZONTAL_COMBINATION_POSITIONS[i].length; j++) {
+                if(gameBoardInArray[HORIZONTAL_COMBINATION_POSITIONS[i][j]] == type.getValue()){
                     counter++;
                     if(counter == 3){
                         return true;
@@ -67,6 +60,20 @@ public class PlayableGameImpl implements PlayableGame {
             }
         }
         return false;
+    }
+
+    private int[] getGameBoardAsArray(int[][] boards) {
+
+        int[] gameBoardInArray = new int[9];
+        int counterIndex = 0;
+
+        for(int i = 0; i< boards.length; i++) {
+            for(int j = 0; j< boards[i].length; j++) {
+                gameBoardInArray[counterIndex] = boards[i][j];
+                counterIndex++;
+            }
+        }
+        return gameBoardInArray;
     }
 
     private boolean isAllSquaresFilled(int[][] boards) {
