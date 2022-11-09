@@ -36,6 +36,10 @@ public class WinnableGameImpl implements WinnableGame {
         if(isXWin) {
             winner.setPlayer(game.getPlayer1());
         }
+        boolean isOWin = typeHas3InARow(game.getBoard(), TicTacToe.O);
+        if(isOWin) {
+            winner.setPlayer(game.getPlayer2());
+        }
         return winner;
     }
 }

@@ -54,4 +54,14 @@ class WinnableGameImplTest {
 
         assertEquals(player1, winner.getPlayer());
     }
+
+    @Test
+    void testWinner_player_2_draw_3_O_in_a_row_and_should_win() throws GameMovesException, GameNotFoundException, GameStatusException {
+        testUtility.simulateStartAndJoinGame(player1, player2, CONTEXT);
+        testUtility.gameWith3OInARowHorizontally();
+
+        Winner winner = winnableGame.winner(gameId);
+
+        assertEquals(player2, winner.getPlayer());
+    }
 }
