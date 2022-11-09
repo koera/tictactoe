@@ -49,6 +49,22 @@ public class GameTestUtility {
         return playOnPosition(TicTacToe.X, 1, 3);
     }
 
+    public Game gameWith3XInARowVertically() throws GameMovesException, GameNotFoundException, GameStatusException {
+        playOnPosition(TicTacToe.X, 1, 1);
+        playOnPosition(TicTacToe.O, 1, 2);
+        playOnPosition(TicTacToe.X, 2, 1);
+        playOnPosition(TicTacToe.O, 2, 2);
+        return playOnPosition(TicTacToe.X, 3, 1);
+    }
+
+    public Game gameWith3XInARowDiagonally() throws GameMovesException, GameNotFoundException, GameStatusException {
+        playOnPosition(TicTacToe.X, 3, 3);
+        playOnPosition(TicTacToe.O, 1, 2);
+        playOnPosition(TicTacToe.X, 2, 2);
+        playOnPosition(TicTacToe.O, 2, 3);
+        return playOnPosition(TicTacToe.X, 1, 1);
+    }
+
     public Game gameWith3OInARowHorizontally() throws GameMovesException, GameNotFoundException, GameStatusException {
         playOnPosition(TicTacToe.X, 2, 1);
         playOnPosition(TicTacToe.O, 3, 1);
@@ -56,6 +72,24 @@ public class GameTestUtility {
         playOnPosition(TicTacToe.O, 3, 2);
         playOnPosition(TicTacToe.X, 1, 3);
         return playOnPosition(TicTacToe.O, 3, 3);
+    }
+
+    public Game gameWith3OInARowVertically() throws GameMovesException, GameNotFoundException, GameStatusException {
+        playOnPosition(TicTacToe.X, 1, 2);
+        playOnPosition(TicTacToe.O, 1, 1);
+        playOnPosition(TicTacToe.X, 2, 3);
+        playOnPosition(TicTacToe.O, 2, 1);
+        playOnPosition(TicTacToe.X, 3, 3);
+        return playOnPosition(TicTacToe.O, 3, 1);
+    }
+
+    public Game gameWith3OInARowDiagonally() throws GameMovesException, GameNotFoundException, GameStatusException {
+        playOnPosition(TicTacToe.X, 3, 1);
+        playOnPosition(TicTacToe.O, 3, 3);
+        playOnPosition(TicTacToe.X, 2, 3);
+        playOnPosition(TicTacToe.O, 2, 2);
+        playOnPosition(TicTacToe.X, 1, 2);
+        return playOnPosition(TicTacToe.O, 1, 1);
     }
 
     public Game gameWith9SquareFilled() throws GameMovesException, GameNotFoundException, GameStatusException {

@@ -46,7 +46,7 @@ class WinnableGameImplTest {
     }
 
     @Test
-    void testWinner_player_1_draw_3_X_in_a_row_and_should_win() throws GameMovesException, GameNotFoundException, GameStatusException {
+    void testWinner_player_1_draw_3_X_in_a_row_horizontally_and_should_win() throws GameMovesException, GameNotFoundException, GameStatusException {
         testUtility.simulateStartAndJoinGame(player1, player2, CONTEXT);
         testUtility.gameWith3XInARowHorizontally();
 
@@ -56,9 +56,49 @@ class WinnableGameImplTest {
     }
 
     @Test
-    void testWinner_player_2_draw_3_O_in_a_row_and_should_win() throws GameMovesException, GameNotFoundException, GameStatusException {
+    void testWinner_player_1_draw_3_X_in_a_row_vertically_and_should_win() throws GameMovesException, GameNotFoundException, GameStatusException {
+        testUtility.simulateStartAndJoinGame(player1, player2, CONTEXT);
+        testUtility.gameWith3XInARowVertically();
+
+        Winner winner = winnableGame.winner(gameId);
+
+        assertEquals(player1, winner.getPlayer());
+    }
+
+    @Test
+    void testWinner_player_1_draw_3_X_in_a_row_diagonally_and_should_win() throws GameMovesException, GameNotFoundException, GameStatusException {
+        testUtility.simulateStartAndJoinGame(player1, player2, CONTEXT);
+        testUtility.gameWith3XInARowDiagonally();
+
+        Winner winner = winnableGame.winner(gameId);
+
+        assertEquals(player1, winner.getPlayer());
+    }
+
+    @Test
+    void testWinner_player_2_draw_3_O_in_a_row_horizontally_and_should_win() throws GameMovesException, GameNotFoundException, GameStatusException {
         testUtility.simulateStartAndJoinGame(player1, player2, CONTEXT);
         testUtility.gameWith3OInARowHorizontally();
+
+        Winner winner = winnableGame.winner(gameId);
+
+        assertEquals(player2, winner.getPlayer());
+    }
+
+    @Test
+    void testWinner_player_2_draw_3_O_in_a_row_vertically_and_should_win() throws GameMovesException, GameNotFoundException, GameStatusException {
+        testUtility.simulateStartAndJoinGame(player1, player2, CONTEXT);
+        testUtility.gameWith3OInARowVertically();
+
+        Winner winner = winnableGame.winner(gameId);
+
+        assertEquals(player2, winner.getPlayer());
+    }
+
+    @Test
+    void testWinner_player_2_draw_3_O_in_a_row_diagonally_and_should_win() throws GameMovesException, GameNotFoundException, GameStatusException {
+        testUtility.simulateStartAndJoinGame(player1, player2, CONTEXT);
+        testUtility.gameWith3OInARowDiagonally();
 
         Winner winner = winnableGame.winner(gameId);
 

@@ -143,23 +143,13 @@ class PlayableGameImplTest {
 
     @Test
     void testPlayGame_finished_game_if_one_player_has_3_in_a_row_vertically() throws GameMovesException, GameNotFoundException, GameStatusException {
-        testUtility.playOnPosition(TicTacToe.X, 1, 1);
-        testUtility.playOnPosition(TicTacToe.O, 1, 2);
-        testUtility.playOnPosition(TicTacToe.X, 2, 1);
-        testUtility.playOnPosition(TicTacToe.O, 2, 2);
-        Game game = testUtility.playOnPosition(TicTacToe.X, 3, 1);
-
-        assertEquals(GameStatus.FINISHED, game.getStatus());
+       Game game = testUtility.gameWith3XInARowVertically();
+       assertEquals(GameStatus.FINISHED, game.getStatus());
     }
 
     @Test
     void testPlayGame_finished_game_if_one_player_has_3_in_a_row_diagonally() throws GameMovesException, GameNotFoundException, GameStatusException {
-        testUtility.playOnPosition(TicTacToe.X, 3, 3);
-        testUtility.playOnPosition(TicTacToe.O, 1, 2);
-        testUtility.playOnPosition(TicTacToe.X, 2, 2);
-        testUtility.playOnPosition(TicTacToe.O, 2, 3);
-        Game game = testUtility.playOnPosition(TicTacToe.X, 1, 1);
-
+        Game game = testUtility.gameWith3XInARowDiagonally();
         assertEquals(GameStatus.FINISHED, game.getStatus());
     }
 
