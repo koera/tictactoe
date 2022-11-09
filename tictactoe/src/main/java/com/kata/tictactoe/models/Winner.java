@@ -3,7 +3,7 @@ package com.kata.tictactoe.models;
 public class Winner {
 
     boolean draw;
-    Player player;
+    private Player player;
 
     public boolean isDraw() {
         return draw;
