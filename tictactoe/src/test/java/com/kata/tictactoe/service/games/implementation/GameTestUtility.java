@@ -17,11 +17,11 @@ public class GameTestUtility {
         this.gameId = gameId;
     }
 
-    public Game simulateStartAndJoinGame(GameContextHolder CONTEXT) {
+    public Game simulateStartAndJoinGame(Player player1, Player player2, GameContextHolder CONTEXT) {
         Game simulatedExistingGame = new Game();
         simulatedExistingGame.setGameId(gameId);
-        simulatedExistingGame.setPlayer1(new Player("player-1"));
-        simulatedExistingGame.setPlayer2(new Player("player-2"));
+        simulatedExistingGame.setPlayer1(player1);
+        simulatedExistingGame.setPlayer2(player2);
         simulatedExistingGame.setStatus(GameStatus.IN_PROGRESS);
         CONTEXT.setGame(simulatedExistingGame);
         return simulatedExistingGame;
@@ -39,5 +39,13 @@ public class GameTestUtility {
         gamePlay.setColumnNumber(col);
         gamePlay.setRowNumber(row);
         return gamePlay;
+    }
+
+    public Game gameWith3XInARowHorizontally() throws GameMovesException, GameNotFoundException, GameStatusException {
+        playOnPosition(TicTacToe.X, 1, 1);
+        playOnPosition(TicTacToe.O, 2, 1);
+        playOnPosition(TicTacToe.X, 1, 2);
+        playOnPosition(TicTacToe.O, 2, 2);
+        return playOnPosition(TicTacToe.X, 1, 3);
     }
 }

@@ -28,7 +28,7 @@ class PlayableGameImplTest {
         if(testInfo.getDisplayName().equals("testPlayGame_only_game_in_context_can_be_played()")){
             return;
         }
-        testUtility.simulateStartAndJoinGame(CONTEXT);
+        testUtility.simulateStartAndJoinGame(new Player("Player-1"), new Player("Player-2"), CONTEXT);
     }
 
     @Test
@@ -148,12 +148,7 @@ class PlayableGameImplTest {
 
     @Test
     void testPlayGame_finished_game_if_one_player_has_3_in_a_row_horizontally() throws GameMovesException, GameNotFoundException, GameStatusException {
-        testUtility.playOnPosition(TicTacToe.X, 1, 1);
-        testUtility.playOnPosition(TicTacToe.O, 2, 1);
-        testUtility.playOnPosition(TicTacToe.X, 1, 2);
-        testUtility.playOnPosition(TicTacToe.O, 2, 2);
-        Game game = testUtility.playOnPosition(TicTacToe.X, 1, 3);
-
+        Game game = testUtility.gameWith3XInARowHorizontally();
         assertEquals(GameStatus.FINISHED, game.getStatus());
     }
 

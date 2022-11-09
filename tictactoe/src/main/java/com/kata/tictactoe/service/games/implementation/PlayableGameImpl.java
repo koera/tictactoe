@@ -10,16 +10,10 @@ import com.kata.tictactoe.service.games.exception.GameMovesException;
 import com.kata.tictactoe.service.games.exception.GameNotFoundException;
 import com.kata.tictactoe.service.games.exception.GameStatusException;
 
-public class PlayableGameImpl implements PlayableGame {
+import static com.kata.tictactoe.service.games.implementation.GameBoardUtility.isAllSquaresFilled;
+import static com.kata.tictactoe.service.games.implementation.GameBoardUtility.typeHas3InARow;
 
-    private static final int[][] GAME_FINISHED_COMBINATION_POSITIONS = {
-            //horizontal
-            {0,1,2}, {3,4,5}, {6,7,8},
-            //vertical
-            {0,3,6}, {1,4,7},{2,5,8},
-            //diagonal
-            {0,4,8}, {2,4,6}
-    };
+public class PlayableGameImpl implements PlayableGame {
 
     private static final GameContextHolder CONTEXT = GameContextHolder.getInstance();
 
@@ -53,48 +47,6 @@ public class PlayableGameImpl implements PlayableGame {
         return playerHas3Horizontal || isAllSquaresFilled(game.getBoard());
     }
 
-    private boolean typeHas3InARow(int[][] board, TicTacToe type) {
-
-        int[] gameBoardInArray = getGameBoardAsArray(board);
-
-        for (int[] horizontalCombinationPosition : GAME_FINISHED_COMBINATION_POSITIONS) {
-            int counter = 0;
-            for (int i : horizontalCombinationPosition) {
-                if (gameBoardInArray[i] == type.getValue()) {
-                    counter++;
-                    if (counter == 3) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    private int[] getGameBoardAsArray(int[][] boards) {
-
-        int[] gameBoardInArray = new int[9];
-        int counterIndex = 0;
-
-        for (int[] board : boards) {
-            for (int i : board) {
-                gameBoardInArray[counterIndex] = i;
-                counterIndex++;
-            }
-        }
-        return gameBoardInArray;
-    }
-
-    private boolean isAllSquaresFilled(int[][] boards) {
-        for (int[] board : boards) {
-            for (int i : board) {
-                if (i == 0) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
 
     private void validateMovesAndPositions(GamePlay gamePlay, Game game) throws GameMovesException {
         validateFirstMove(gamePlay, game);
