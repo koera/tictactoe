@@ -191,5 +191,16 @@ class PlayableGameImplTest {
         assertEquals(GameStatus.FINISHED, game.getStatus());
     }
 
+    @Test
+    void testPlayGame_finished_game_if_one_player_has_3_in_a_row_diagonally() throws GameMovesException, GameNotFoundException, GameStatusException {
+        playOnPostion(TicTacToe.X, 3, 3);
+        playOnPostion(TicTacToe.O, 1, 2);
+        playOnPostion(TicTacToe.X, 2, 2);
+        playOnPostion(TicTacToe.O, 2, 3);
+        Game game = playOnPostion(TicTacToe.X, 1, 1);
+
+        assertEquals(GameStatus.FINISHED, game.getStatus());
+    }
+
 
 }

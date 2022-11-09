@@ -12,11 +12,13 @@ import com.kata.tictactoe.service.games.exception.GameStatusException;
 
 public class PlayableGameImpl implements PlayableGame {
 
-    private static final int[][] HORIZONTAL_AND_VERTICAL_COMBINATION_POSITIONS = {
+    private static final int[][] GAME_FINISHED_COMBINATION_POSITIONS = {
             //horizontal
             {0,1,2}, {3,4,5}, {6,7,8},
             //vertical
-            {0,3,6}, {1,4,7},{2,5,8}
+            {0,3,6}, {1,4,7},{2,5,8},
+            //diagonal
+            {0,4,8}, {2,4,6}
     };
 
     private static final GameContextHolder CONTEXT = GameContextHolder.getInstance();
@@ -55,7 +57,7 @@ public class PlayableGameImpl implements PlayableGame {
 
         int[] gameBoardInArray = getGameBoardAsArray(board);
 
-        for (int[] horizontalCombinationPosition : HORIZONTAL_AND_VERTICAL_COMBINATION_POSITIONS) {
+        for (int[] horizontalCombinationPosition : GAME_FINISHED_COMBINATION_POSITIONS) {
             int counter = 0;
             for (int i : horizontalCombinationPosition) {
                 if (gameBoardInArray[i] == type.getValue()) {
