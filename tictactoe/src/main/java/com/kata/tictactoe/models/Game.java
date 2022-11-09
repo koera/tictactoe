@@ -12,7 +12,7 @@ public class Game {
     private int[][] board = new int[3][3];
     private List<String> moves = new ArrayList<>();
     private GameStatus status;
-    private TicTacToe winner;
+    private Winner winner;
 
     public UUID getGameId() {
         return gameId;
@@ -58,11 +58,11 @@ public class Game {
         this.status = status;
     }
 
-    public TicTacToe getWinner() {
+    public Winner getWinner() {
         return winner;
     }
 
-    public void setWinner(TicTacToe winner) {
+    public void setWinner(Winner winner) {
         this.winner = winner;
     }
 }

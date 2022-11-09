@@ -1,8 +1,8 @@
 package com.kata.tictactoe.service.games;
 
 import com.kata.tictactoe.models.Game;
-import com.kata.tictactoe.models.Player;
+import com.kata.tictactoe.models.Winner;
 
 public interface WinnableGame {
-    Player winner(Game game);
+    Winner winner(Game game);
 }
