@@ -154,17 +154,17 @@ class PlayableGameImplTest {
 
     @Test
     void testPlayGame_finished_game_if_all_9_squares_are_filled() throws GameMovesException, GameNotFoundException, GameStatusException {
-        playOnPostion(TicTacToe.X, 1, 1);
-        playOnPostion(TicTacToe.O, 1, 2);
-        playOnPostion(TicTacToe.X, 1, 3);
+        playOnPostion(TicTacToe.X, 1, 2);
+        playOnPostion(TicTacToe.O, 1, 1);
+        playOnPostion(TicTacToe.X, 2, 1);
 
-        playOnPostion(TicTacToe.O, 2, 1);
+        playOnPostion(TicTacToe.O, 1, 3);
         playOnPostion(TicTacToe.X, 2, 2);
         playOnPostion(TicTacToe.O, 2, 3);
 
-        playOnPostion(TicTacToe.X, 3, 1);
+        playOnPostion(TicTacToe.X, 3, 3);
         playOnPostion(TicTacToe.O, 3, 2);
-        Game game = playOnPostion(TicTacToe.X, 3, 3);
+        Game game = playOnPostion(TicTacToe.X, 3, 1);
 
         assertEquals(GameStatus.FINISHED, game.getStatus());
     }
