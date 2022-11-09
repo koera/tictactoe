@@ -7,9 +7,11 @@ import com.kata.tictactoe.service.games.JoinableGame;
 import com.kata.tictactoe.service.games.context.GameContextHolder;
 import com.kata.tictactoe.service.games.exception.GameStatusException;
 import com.kata.tictactoe.service.games.exception.GameNotFoundException;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+@Component
 public class JoinableGameImpl implements JoinableGame {
 
     private GameContextHolder CONTEXT = GameContextHolder.getInstance();

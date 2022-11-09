@@ -5,9 +5,11 @@ import com.kata.tictactoe.models.Game;
 import com.kata.tictactoe.models.GameStatus;
 import com.kata.tictactoe.models.Player;
 import com.kata.tictactoe.service.games.StartableGame;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+@Component
 public class StartableGameImpl implements StartableGame {
 
     private static GameContextHolder CONTEXT = GameContextHolder.getInstance();

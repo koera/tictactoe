@@ -8,12 +8,15 @@ import com.kata.tictactoe.service.games.WinnableGame;
 import com.kata.tictactoe.service.games.context.GameContextHolder;
 import com.kata.tictactoe.service.games.exception.GameNotFoundException;
 import com.kata.tictactoe.service.games.exception.GameStatusException;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 import static com.kata.tictactoe.service.games.implementation.utilities.GameBoardUtility.isAllSquaresFilled;
 import static com.kata.tictactoe.service.games.implementation.utilities.GameBoardUtility.typeHas3InARow;
 
+
+@Component
 public class WinnableGameImpl implements WinnableGame {
 
     private static final GameContextHolder CONTEXT = GameContextHolder.getInstance();
