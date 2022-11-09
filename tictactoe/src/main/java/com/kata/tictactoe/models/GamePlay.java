@@ -8,6 +8,16 @@ public class GamePlay {
     private int rowNumber;
     private int columnNumber;
 
+    public GamePlay() {
+    }
+
+    public GamePlay(UUID gameId, TicTacToe type, int rowNumber, int columnNumber) {
+        this.gameId = gameId;
+        this.type = type;
+        this.rowNumber = rowNumber;
+        this.columnNumber = columnNumber;
+    }
+
     public UUID getGameId() {
         return gameId;
     }
