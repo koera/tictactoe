@@ -33,6 +33,16 @@ public class WinnableGameImpl implements WinnableGame {
 
         Winner winner = new Winner();
 
+        checkForWinner(game, winner);
+
+        if(noWinner(winner) && isAllSquaresFilled(game.getBoard())) {
+            winner.setDraw(true);
+        }
+
+        return winner;
+    }
+
+    private void checkForWinner(Game game, Winner winner) {
         boolean isXWin = typeHas3InARow(game.getBoard(), TicTacToe.X);
         if(isXWin) {
             winner.setPlayer(game.getPlayer1());
@@ -42,15 +52,9 @@ public class WinnableGameImpl implements WinnableGame {
         if(isOWin) {
             winner.setPlayer(game.getPlayer2());
         }
-
-        if(noWin(isXWin, isOWin) && isAllSquaresFilled(game.getBoard())) {
-            winner.setDraw(true);
-        }
-
-        return winner;
     }
 
-    private static boolean noWin(boolean isXWin, boolean isOWin) {
-        return !isXWin || !isOWin;
+    private static boolean noWinner(Winner winner) {
+        return winner.getPlayer() == null;
     }
 }
