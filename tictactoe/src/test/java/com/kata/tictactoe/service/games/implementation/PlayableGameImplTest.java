@@ -180,5 +180,16 @@ class PlayableGameImplTest {
         assertEquals(GameStatus.FINISHED, game.getStatus());
     }
 
+    @Test
+    void testPlayGame_finished_game_if_one_player_has_3_in_a_row_vertically() throws GameMovesException, GameNotFoundException, GameStatusException {
+        playOnPostion(TicTacToe.X, 1, 1);
+        playOnPostion(TicTacToe.O, 1, 2);
+        playOnPostion(TicTacToe.X, 2, 1);
+        playOnPostion(TicTacToe.O, 2, 2);
+        Game game = playOnPostion(TicTacToe.X, 3, 1);
+
+        assertEquals(GameStatus.FINISHED, game.getStatus());
+    }
+
 
 }
