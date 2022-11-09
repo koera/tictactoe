@@ -92,7 +92,7 @@ public class PlayableGameImpl implements PlayableGame {
     private void validateMovesAndPositions(GamePlay gamePlay, Game game) throws GameMovesException {
         validateFirstMove(gamePlay, game);
 
-        if(!game.getMoves().isEmpty()) {
+        if(!isFirstMove(game)) {
             validateAlternateTurn(gamePlay, game);
         }
 
@@ -100,7 +100,7 @@ public class PlayableGameImpl implements PlayableGame {
     }
 
     private void validatePosition(GamePlay gamePlay, Game game) throws GameMovesException {
-        if(game.getBoard()[gamePlay.getRowNumber() - 1][gamePlay.getColumnNumber() - 1] != 0) {
+        if(isPositionAlreadyPlayed(gamePlay.getRowNumber(), gamePlay.getColumnNumber(), game.getBoard())) {
             throw new GameMovesException(
                     String.format(
                             "Position at row %d and col %d is already played", gamePlay.getRowNumber(), gamePlay.getColumnNumber()
@@ -109,10 +109,15 @@ public class PlayableGameImpl implements PlayableGame {
         }
     }
 
+    private boolean isPositionAlreadyPlayed(int row, int col, int[][] board) {
+        return board[row - 1][col - 1] != 0;
+    }
+
     private void validateAlternateTurn(GamePlay gamePlay, Game game) throws GameMovesException {
         String lastMove = game.getMoves().get(game.getMoves().size() - 1);
+        String currentMove = gamePlay.getType().name();
 
-        if (lastMove.equalsIgnoreCase(gamePlay.getType().name())) {
+        if (lastMove.equalsIgnoreCase(currentMove)) {
             throw new GameMovesException(
                     String.format("Wrong turn, %s's turn now", gamePlay.getType().equals(TicTacToe.X) ? TicTacToe.O : TicTacToe.X)
             );
@@ -120,9 +125,17 @@ public class PlayableGameImpl implements PlayableGame {
     }
 
     private void validateFirstMove(GamePlay gamePlay, Game game) throws GameMovesException {
-        if(game.getMoves().isEmpty() && !TicTacToe.X.equals(gamePlay.getType())) {
+        if(isFirstMove(game) && currentMoveIsNotX(gamePlay.getType())) {
             throw new GameMovesException("First moves should be X");
         }
+    }
+
+    private boolean currentMoveIsNotX(TicTacToe currentMove) {
+        return !TicTacToe.X.equals(currentMove);
+    }
+
+    private boolean isFirstMove(Game game) {
+        return game.getMoves().isEmpty();
     }
 
     private void saveMovesAndPosition(GamePlay gamePlay, Game game) {
