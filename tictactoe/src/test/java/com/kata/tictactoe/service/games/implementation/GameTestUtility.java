@@ -57,4 +57,18 @@ public class GameTestUtility {
         playOnPosition(TicTacToe.X, 1, 3);
         return playOnPosition(TicTacToe.O, 3, 3);
     }
+
+    public Game gameWith9SquareFilled() throws GameMovesException, GameNotFoundException, GameStatusException {
+        playOnPosition(TicTacToe.X, 1, 2);
+        playOnPosition(TicTacToe.O, 1, 1);
+        playOnPosition(TicTacToe.X, 2, 1);
+
+        playOnPosition(TicTacToe.O, 1, 3);
+        playOnPosition(TicTacToe.X, 2, 2);
+        playOnPosition(TicTacToe.O, 2, 3);
+
+        playOnPosition(TicTacToe.X, 3, 3);
+        playOnPosition(TicTacToe.O, 3, 2);
+        return playOnPosition(TicTacToe.X, 3, 1);
+    }
 }

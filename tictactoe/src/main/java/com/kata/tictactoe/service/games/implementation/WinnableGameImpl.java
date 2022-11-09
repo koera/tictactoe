@@ -11,6 +11,7 @@ import com.kata.tictactoe.service.games.exception.GameStatusException;
 
 import java.util.UUID;
 
+import static com.kata.tictactoe.service.games.implementation.GameBoardUtility.isAllSquaresFilled;
 import static com.kata.tictactoe.service.games.implementation.GameBoardUtility.typeHas3InARow;
 
 public class WinnableGameImpl implements WinnableGame {
@@ -36,10 +37,20 @@ public class WinnableGameImpl implements WinnableGame {
         if(isXWin) {
             winner.setPlayer(game.getPlayer1());
         }
+
         boolean isOWin = typeHas3InARow(game.getBoard(), TicTacToe.O);
         if(isOWin) {
             winner.setPlayer(game.getPlayer2());
         }
+
+        if(noWin(isXWin, isOWin) && isAllSquaresFilled(game.getBoard())) {
+            winner.setDraw(true);
+        }
+
         return winner;
+    }
+
+    private static boolean noWin(boolean isXWin, boolean isOWin) {
+        return !isXWin || !isOWin;
     }
 }

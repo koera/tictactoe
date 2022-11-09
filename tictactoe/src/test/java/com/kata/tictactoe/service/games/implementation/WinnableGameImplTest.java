@@ -64,4 +64,14 @@ class WinnableGameImplTest {
 
         assertEquals(player2, winner.getPlayer());
     }
+
+    @Test
+    void testWinner_all_9_squares_are_filled_and_no_player_win_game_should_be_draw() throws GameMovesException, GameNotFoundException, GameStatusException {
+        testUtility.simulateStartAndJoinGame(player1, player2, CONTEXT);
+        testUtility.gameWith9SquareFilled();
+
+        Winner winner = winnableGame.winner(gameId);
+
+        assertEquals(true, winner.isDraw());
+    }
 }
