@@ -11,8 +11,8 @@ import com.kata.tictactoe.service.games.exception.GameStatusException;
 
 import java.util.UUID;
 
-import static com.kata.tictactoe.service.games.implementation.GameBoardUtility.isAllSquaresFilled;
-import static com.kata.tictactoe.service.games.implementation.GameBoardUtility.typeHas3InARow;
+import static com.kata.tictactoe.service.games.implementation.utilities.GameBoardUtility.isAllSquaresFilled;
+import static com.kata.tictactoe.service.games.implementation.utilities.GameBoardUtility.typeHas3InARow;
 
 public class WinnableGameImpl implements WinnableGame {
 

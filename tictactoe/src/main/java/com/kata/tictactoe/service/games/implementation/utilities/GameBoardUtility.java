@@ -1,4 +1,4 @@
-package com.kata.tictactoe.service.games.implementation;
+package com.kata.tictactoe.service.games.implementation.utilities;
 
 import com.kata.tictactoe.models.TicTacToe;
 
