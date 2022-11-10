@@ -1,5 +1,8 @@
 # Tic Tac Toe
 
+![alt tictactoe image](https://github.com/2022-DEV1-079/TicTacToe/blob/master/Kata_TicTacToe.png?raw=true)
+
+
 ### About this Kata
 
 This short and simple Kata is performed by using **Test Driven Development** (TDD).
