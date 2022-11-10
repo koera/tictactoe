@@ -5,7 +5,7 @@
 
 ### About this Kata
 
-This short and simple Kata is performed by using **Test Driven Development** (TDD).
+Simple tictactoe game written in Java and Spring using **Test Driven Development** (TDD) process.
 
 ### Prerequisites
 
@@ -45,3 +45,10 @@ The rules are described below :
 	- All nine squares are filled.
 - If a player is able to draw three X’s or three O’s in a row, that player wins.
 - If all nine squares are filled and neither player has three in a row, the game is a draw.
+
+### Tags
+- Java 8
+- Spring Boot
+- JUnit
+- Rest api
+- Swagger
