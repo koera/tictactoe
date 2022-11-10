@@ -4,7 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kata.tictactoe.controller.dto.ErrorMessage;
 import com.kata.tictactoe.models.Game;
+import com.kata.tictactoe.models.GamePlay;
 import com.kata.tictactoe.models.Player;
+import com.kata.tictactoe.models.TicTacToe;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -28,10 +31,12 @@ public class GameControllerExceptionHandlerTest {
 
     private final ObjectMapper MAPPER = new ObjectMapper();
 
-    @Test
-    void join_to_non_existing_game_should_have_status_not_found() throws Exception{
-        UUID randomGameId = UUID.randomUUID();
+    private final Player player1 = new Player("player-1");
+    private final Player player2 = new Player("player-2");
 
+    private GameControllerTestUtility testUtility;
+
+    private ErrorMessage joinNonExistingGame(UUID randomGameId) throws Exception {
         MvcResult result = mockMvc.perform(
                         MockMvcRequestBuilders.post("/tic-tac-toe/join-game/" + randomGameId)
                                 .contentType("application/json")
@@ -40,9 +45,46 @@ public class GameControllerExceptionHandlerTest {
                 .andReturn();
         ErrorMessage errorMessage =  MAPPER.readValue(result.getResponse().getContentAsString(), new TypeReference<ErrorMessage>() {
         });
+        return errorMessage;
+    }
+
+    private ErrorMessage playNotJoinedGame(UUID gameId, TicTacToe type, int row, int col) throws Exception {
+        GamePlay gamePlay = new GamePlay(gameId, type, row, col);
+        MvcResult result = mockMvc.perform(
+                        MockMvcRequestBuilders.post("/tic-tac-toe/play-game/")
+                                .contentType("application/json")
+                                .content(MAPPER.writeValueAsBytes(gamePlay)))
+                .andExpect(status().isServiceUnavailable())
+                .andReturn();
+        ErrorMessage errorMessage =  MAPPER.readValue(result.getResponse().getContentAsString(), new TypeReference<ErrorMessage>() {
+        });
+        return errorMessage;
+    }
+
+    @BeforeEach
+    void setUp(){
+        testUtility = new GameControllerTestUtility(mockMvc);
+    }
+
+    @Test
+    void join_to_non_existing_game_should_have_status_not_found() throws Exception{
+        UUID randomGameId = UUID.randomUUID();
+
+        ErrorMessage errorMessage = joinNonExistingGame(randomGameId);
 
         assertEquals("Game with id " + randomGameId + " cannot be found", errorMessage.getMessage());
         assertNotNull(errorMessage.getTimestamp());
         assertEquals(404, errorMessage.getStatusCode());
+    }
+
+    @Test
+    void play_non_joined_game_should_have_game_status_exception() throws Exception {
+        Game startedGame = testUtility.startGame(player1);
+
+        ErrorMessage errorMessage = playNotJoinedGame(startedGame.getGameId(), TicTacToe.X, 1,1);
+
+        assertEquals("Game " + startedGame.getGameId() + " is not started yet or already finished", errorMessage.getMessage());
+        assertNotNull(errorMessage.getTimestamp());
+        assertEquals(503, errorMessage.getStatusCode());
     }
 }
