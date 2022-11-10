@@ -9,7 +9,7 @@ Simple tictactoe game written in Java and Spring using **Test Driven Development
 
 ### Prerequisites
 
-- Java 8 or above
+- Java 8
 
 ### How to build ?
 
