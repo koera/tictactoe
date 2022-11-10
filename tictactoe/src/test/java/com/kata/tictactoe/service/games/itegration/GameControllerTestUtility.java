@@ -2,6 +2,7 @@ package com.kata.tictactoe.service.games.itegration;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kata.tictactoe.controller.dto.ErrorMessage;
 import com.kata.tictactoe.models.*;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -66,6 +67,26 @@ public class GameControllerTestUtility {
                 .andExpect(status().isOk())
                 .andReturn();
         return MAPPER.readValue(result.getResponse().getContentAsString(), new TypeReference<Game>() {
+        });
+    }
+
+    public ErrorMessage playGameWithWrongTurnAndGetBadRequest(Player player1, Player player2) throws Exception {
+        Game startedGame = startGame(player1);
+        joinGame(startedGame.getGameId(), player2);
+
+        playGameAtPosition(startedGame.getGameId(), TicTacToe.X, 1, 1);
+        return playGameAtPosition_BadRequest(startedGame.getGameId(), TicTacToe.X, 2, 1);
+    }
+
+    public ErrorMessage playGameAtPosition_BadRequest(UUID gameId, TicTacToe type, int row, int col) throws Exception{
+        GamePlay gamePlay = new GamePlay(gameId, type, row, col);
+        MvcResult result = mockMvc.perform(
+                        MockMvcRequestBuilders.post("/tic-tac-toe/play-game/")
+                                .contentType("application/json")
+                                .content(MAPPER.writeValueAsBytes(gamePlay)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+        return MAPPER.readValue(result.getResponse().getContentAsString(), new TypeReference<ErrorMessage>() {
         });
     }
 

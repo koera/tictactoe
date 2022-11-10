@@ -29,4 +29,11 @@ public class ControllerExceptionHandler {
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.SERVICE_UNAVAILABLE.value(), new Date(), exception.getMessage());
         return errorMessage;
     }
+
+    @ExceptionHandler(GameMovesException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage gameMovesExceptionHandler(GameMovesException exception) {
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), new Date(), exception.getMessage());
+        return errorMessage;
+    }
 }

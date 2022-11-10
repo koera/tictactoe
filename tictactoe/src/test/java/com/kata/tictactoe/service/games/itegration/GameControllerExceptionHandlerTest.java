@@ -87,4 +87,14 @@ public class GameControllerExceptionHandlerTest {
         assertNotNull(errorMessage.getTimestamp());
         assertEquals(503, errorMessage.getStatusCode());
     }
+
+    @Test
+    void play_with_wrong_turn_should_have_bad_request() throws Exception {
+
+        ErrorMessage errorMessage = testUtility.playGameWithWrongTurnAndGetBadRequest(player1, player2);
+
+        assertEquals("Wrong turn, O's turn now", errorMessage.getMessage());
+        assertNotNull(errorMessage.getTimestamp());
+        assertEquals(400, errorMessage.getStatusCode());
+    }
 }
