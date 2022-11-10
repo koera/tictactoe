@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.UUID;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -94,6 +96,21 @@ public class GameControllerExceptionHandlerTest {
         ErrorMessage errorMessage = testUtility.playGameWithWrongTurnAndGetBadRequest(player1, player2);
 
         assertEquals("Wrong turn, O's turn now", errorMessage.getMessage());
+        assertNotNull(errorMessage.getTimestamp());
+        assertEquals(400, errorMessage.getStatusCode());
+    }
+
+    @Test
+    void game_play_columnNumber_and_rowNumber_should_be_validated() throws Exception {
+        UUID randomGameId = UUID.randomUUID();
+        ErrorMessage errorMessage = testUtility.playGameAtPosition_BadRequest(
+                randomGameId,
+                TicTacToe.X,
+                0,
+                4
+        );
+        assertThat(errorMessage.getMessage(), containsString("columnNumber must be less than or equal to 3"));
+        assertThat(errorMessage.getMessage(), containsString("rowNumber must be greater than or equal to 1"));
         assertNotNull(errorMessage.getTimestamp());
         assertEquals(400, errorMessage.getStatusCode());
     }

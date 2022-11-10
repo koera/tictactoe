@@ -1,11 +1,17 @@
 package com.kata.tictactoe.models;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.UUID;
 
 public class GamePlay {
     private UUID gameId;
     private TicTacToe type;
+    @Min(value = 1, message = "rowNumber must be greater than or equal to 1")
+    @Max(value = 3, message = "rowNumber must be less than or equal to 3")
     private int rowNumber;
+    @Min(value = 1, message = "columnNumber must be greater than or equal to 1")
+    @Max(value = 3, message = "columnNumber must be less than or equal to 3")
     private int columnNumber;
 
     public GamePlay() {

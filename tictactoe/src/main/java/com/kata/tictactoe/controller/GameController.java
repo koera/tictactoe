@@ -10,6 +10,7 @@ import com.kata.tictactoe.service.games.exception.GameNotFoundException;
 import com.kata.tictactoe.service.games.exception.GameStatusException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 @RestController
 @RequestMapping("/tic-tac-toe")
@@ -35,7 +36,7 @@ public class GameController implements IGameController {
 
     @Override
     @PostMapping("/play-game")
-    public Game playGame(@RequestBody GamePlay gamePlay) throws GameMovesException, GameNotFoundException, GameStatusException {
+    public Game playGame(@Valid @RequestBody GamePlay gamePlay) throws GameMovesException, GameNotFoundException, GameStatusException {
         return ticToeGame.playGame(gamePlay);
     }
 
